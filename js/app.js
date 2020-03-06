@@ -1,31 +1,24 @@
 
 
-let moves = 0
+
 
 let game = {
    data : ["fire","wheel", "Telephone","lightbulb","car","computer"],
-   
+   moves : 0,
    check : [],
    firstCard : {},
    secondCard : {},
-   
-   
-
-
-
    showClick : function() {
-          
+              
+       $('.card').on("click",function(){
 
-        
-       $('.card1').on("click",function(){
+        game.moves =game.moves +1;
+        let bigmove = ` Moves ${game.moves}`;
+        $("#move").html(bigmove);
 
-        moves = moves +1
-        let bigmove = ` Moves ${moves}`
-        $("#move").html(bigmove)
+        let click = false;
 
-        let click = false
-
-
+    
         if($(this).hasClass("checkCard")) {
             return
         }
@@ -63,26 +56,16 @@ let game = {
 
             if (game.data.length== 0) {
                 $(".overlay-text").addClass("visible");
-
-             
-              
-
             }
-        
-
             game.check = []
-    
-
             }
             
-          
-
-
         if (!click){
 
 
             game.firstCard = $(this)
             console.log(game.firstCard)
+            game.firstCard.addClass("checkCardRestart")
 
         }
             
@@ -99,14 +82,6 @@ for (var i = ul.children.length; i >= 0; i--) {
 
     },
 
-
-
-
-
-    
-
-
-
 }
 
 game.showClick()
@@ -122,11 +97,12 @@ $("#Restart").on("click",function(){
  $(".checkCard").children("img").css("display","none")
  $(".checkCard").removeClass("checkCard")
 
- 
- 
-//  $("#header").addClass("hiddentext")
+ $(".checkCardRestart").children("p").css("display","none")
+ $(".checkCardRestart").children("img").css("display","none")
+ $(".checkCardRestart").removeClass("checkCard")
 
-
+ $("#move").html("Moves");
+ game.moves = 0
 
 
 })
@@ -143,11 +119,9 @@ $("#restartEnd").on("click",function(){
     $(".checkCard").removeClass("checkCard")
    
     $(".overlay-text").removeClass("visible");
-   //  $("#header").addClass("hiddentext")
-   
-   
-   
-   
+    $("#move").html("Moves");
+    game.moves = 0
+   //  $("#header").addClass("hiddentext")  
    })
 
 
