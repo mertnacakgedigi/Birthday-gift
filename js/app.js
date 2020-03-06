@@ -1,13 +1,21 @@
 
-
-
-
 let game = {
    data : ["fire","wheel", "Telephone","lightbulb","car","computer"],
    moves : 0,
    check : [],
    firstCard : {},
    secondCard : {},
+   show : function(element){
+
+    $(element).children("p:first").show("fast")
+    $(element).children("img:first").show("fast")
+
+   },
+   hide : function(element){
+
+    element.children("p:first").hide("slow")
+    element.children("img:first").hide("slow")
+   },
    showClick : function() {
               
        $('.card').on("click",function(){
@@ -15,113 +23,88 @@ let game = {
         game.moves =game.moves +1;
         let bigmove = ` Moves ${game.moves}`;
         $("#move").html(bigmove);
+        $("#move2").html(bigmove);
 
         let click = false;
 
-    
         if($(this).hasClass("checkCard")) {
             return
         }
 
-        $(this).children("p:first").show("fast")
-        $(this).children("img:first").show("fast")
-        game.check.push($(this).attr("data-framework"))
+        game.show(this);
+       
+        game.check.push($(this).attr("data-framework"));
 
-        console.log(game.check)
         if (game.check.length ===2) {
       
-            click =true
-            game.secondCard = $(this)
-
-            console.log(game.firstCard.attr("data-framework"))
-            console.log(game.secondCard.attr("data-framework"))
+            click =true;
+            game.secondCard = $(this);
 
             if (game.check[0] === game.data[0] && game.check[1]=== game.data[0]) {
-                game.firstCard.addClass ("checkCard")
-                $(this).addClass("checkCard")
-                       
-                  game.data.shift()
+                game.firstCard.addClass ("checkCard");
+                $(this).addClass("checkCard");       
+                game.data.shift();
+
+                
             } else {
 
-            game.firstCard.children("p:first").hide("slow")
-            game.firstCard.children("img:first").hide("slow")
-             
-            $(this).children("p:first").hide("slow")
-            $(this).children("img:first").hide("slow")
-            }
+            game.hide(game.firstCard);
+            game.hide($(this));
             
-            console.log(game.firstCard)
-            console.log(game.secondCard)
-
+            }
 
             if (game.data.length== 0) {
                 $(".overlay-text").addClass("visible");
+                
             }
             game.check = []
             }
             
         if (!click){
 
-
-            game.firstCard = $(this)
-            console.log(game.firstCard)
-            game.firstCard.addClass("checkCardRestart")
+            game.firstCard = $(this);
+       
+            game.firstCard.addClass("checkCardRestart");
 
         }
-            
-
     })
        
     },
 
     restart : function() {
-        var ul = document.querySelector('.deck');
-for (var i = ul.children.length; i >= 0; i--) {
-    ul.appendChild(ul.children[Math.random() * i | 0]);
+        var shuffle = document.querySelector('.deck');
+    for (var i = shuffle.children.length; i >= 0; i--) {
+    shuffle.appendChild(shuffle.children[Math.random() * i | 0]);
     }  
 
     },
 
 }
 
-game.showClick()
+game.showClick();
 
-game.restart()
+game.restart();
 
-$("#Restart").on("click",function(){
- game.restart();
+let checkCard = (element) => {
 
- game.data = ["fire","wheel", "Telephone","lightbulb","car","computer"]
+    $(element).children("p").css("display","none");
+    $(element).children("img").css("display","none");
+    $(element).removeClass("checkCard");
 
- $(".checkCard").children("p").css("display","none")
- $(".checkCard").children("img").css("display","none")
- $(".checkCard").removeClass("checkCard")
+}
 
- $(".checkCardRestart").children("p").css("display","none")
- $(".checkCardRestart").children("img").css("display","none")
- $(".checkCardRestart").removeClass("checkCard")
-
- $("#move").html("Moves");
- game.moves = 0
-
-
-})
-
-
-
-$("#restartEnd").on("click",function(){
+let Restart = () => {
     game.restart();
-   
-    game.data = ["fire","wheel", "Telephone","lightbulb","car","computer"]
-   
-    $(".checkCard").children("p").css("display","none")
-    $(".checkCard").children("img").css("display","none")
-    $(".checkCard").removeClass("checkCard")
-   
-    $(".overlay-text").removeClass("visible");
+    game.data = ["fire","wheel", "Telephone","lightbulb","car","computer"];
+    checkCard(".checkCard");
+    checkCard(".checkCardRestart"); 
+    $(".overlay-text").removeClass("visible");;
     $("#move").html("Moves");
-    game.moves = 0
-   //  $("#header").addClass("hiddentext")  
-   })
+    game.moves = 0   
+   
+}
 
+$("#Restart").on("click", Restart);
+
+$("#restartEnd").on("click", Restart);
 
